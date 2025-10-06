@@ -45,3 +45,16 @@ application {
     // Define the main class for the application.
     mainClass = "org.example.AppKt"
 }
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "org.example.AppKt"
+    }
+
+    from(sourceSets["main"].output)
+
+    // 包含所有依赖
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
